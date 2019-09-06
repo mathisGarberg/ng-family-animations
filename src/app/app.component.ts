@@ -28,19 +28,19 @@ import {
             style({ opacity: 1, transform: 'translateY(0)', offset: 1.0 }),
           ]))]), { optional: true }),
 
-        query(':leave', stagger('300ms', [
-          animate('200ms ease-in', keyframes([
-            style({ opacity: 1, transform: 'translateY(0)', offset: 0 }),
-            style({ opacity: .5, transform: 'translateY(35px)', offset: 0.3 }),
-            style({ opacity: 0, transform: 'translateY(-75%)', offset: 1.0 }),
-          ]))]), { optional: true })
+        // query(':leave', stagger('300ms', [
+        //   animate('200ms ease-in', keyframes([
+        //     style({ opacity: 1, transform: 'translateY(0)', offset: 0 }),
+        //     style({ opacity: .5, transform: 'translateY(35px)', offset: 0.3 }),
+        //     style({ opacity: 0, transform: 'translateY(-75%)', offset: 1.0 }),
+        //   ]))]), { optional: true })
       ])
     ]),
     trigger('shrinkOut', [
       state('open', style({
         height: '200px',
         opacity: 1,
-        backgroundColor: 'yellow'
+        backgroundColor: 'red'
       })),
       state('closed', style({
         height: '100px',
