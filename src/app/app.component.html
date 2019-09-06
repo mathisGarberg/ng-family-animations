@@ -22,7 +22,7 @@
             <li class="hero redBox" [@shrinkOut]="person.animationState == 'open' ? 'open' : 'closed'" *ngFor="let person of myPeople; let i = index" (click)="deleteElement(person)">
               {{ person.name + '(' + myPeople.length + ')' }}
             </li>
-            <li *ngIf="myPeople.length === 0">
+            <li *ngIf="findStringInObjArr(myPeople)">
               Ingen famile.
             </li>
           </ul>

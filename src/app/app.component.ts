@@ -71,7 +71,7 @@ export class AppComponent {
 
   deleteElement(elementToDelete: { id: number, name: string }): void {
     this.peopleSource$.getValue().toPromise()
-
+      // .then(v => v.filter(p => p.id !== elementToDelete.id))
       .then(res => {
         const personWithDeleteState = res.map(p => (p.id === elementToDelete.id) ? {...p, animationState: 'closed'} : p);
 
@@ -95,5 +95,9 @@ export class AppComponent {
     return families.map((family: { lastname: string, familyMembers?: { id: number, name: string }[] }, i) => {
         return family;
     });
+  }
+
+  findStringInObjArr(objArr: any): boolean {
+    return objArr.filter(obj => obj.animationState === 'closed').length === objArr.length;
   }
 }
