@@ -11,6 +11,7 @@ import {
   stagger,
   keyframes
 } from '@angular/animations';
+import { families, people } from './mock-data';
 
 @Component({
   selector: 'my-app',
@@ -22,23 +23,15 @@ import {
         query(':enter', style({ opacity: 0 }), { optional: true }),
 
         query(':enter', stagger('300ms', [
-          animate('1s ease-in', keyframes([
+          animate('.5s ease-in', keyframes([
             style({ opacity: 0, transform: 'translateY(-75%)', offset: 0 }),
             style({ opacity: .5, transform: 'translateY(35px)', offset: 0.3 }),
             style({ opacity: 1, transform: 'translateY(0)', offset: 1.0 }),
           ]))]), { optional: true }),
-
-        // query(':leave', stagger('300ms', [
-        //   animate('200ms ease-in', keyframes([
-        //     style({ opacity: 1, transform: 'translateY(0)', offset: 0 }),
-        //     style({ opacity: .5, transform: 'translateY(35px)', offset: 0.3 }),
-        //     style({ opacity: 0, transform: 'translateY(-75%)', offset: 1.0 }),
-        //   ]))]), { optional: true })
       ])
     ]),
     trigger('shrinkOut', [
       state('open', style({
-        height: '200px',
         opacity: 1,
         backgroundColor: 'red'
       })),
@@ -47,9 +40,9 @@ import {
         opacity: 0.5,
         backgroundColor: 'green'
       })),
-      transition('open => closed', [
-        animate('1s')
-      ]),
+      // transition('open => closed', [
+      //   animate(1000)
+      // ])
     ])
   ]
 })
@@ -61,23 +54,7 @@ export class AppComponent {
       content: 'This is off the hook!!'
     });
 
-  familyHead$ = of([
-    {
-      id: 1,
-      lastname: 'Garberg',
-      familyMembers: [  { id: 1, name: 'Anne Katt', animationState: 'open' }, { id: 2, name: 'Hitler', animationState: 'open' }, { id: 3, name: 'Elton John', animationState: 'open' }, { id: 4, name: 'Michael Jackson', animationState: 'open' }, { id: 5, name: 'Haien Stog', animationState: 'open' }]
-    },
-    {
-      id: 2,
-      lastname: 'Tveiten',
-      familyMembers: [  { id: 1, name: 'Mathis' }, { id: 4, name: 'Brunhild' }, { id: 5, name: 'Haien Stog' }]
-    },
-    {
-      id: 3,
-      lastname: 'Jensen',
-      familyMembers: [  { id: 1, name: 'Mathis' }, { id: 2, name: 'Plorb' }]
-    }
-  ]);
+  familyHead$ = of(families);
 
   familiesSource$ = new Subject<{ lastname: string, familyMembers?: { id: number, name: string }[] }[]>();
   families$ = merge(
@@ -85,30 +62,7 @@ export class AppComponent {
     this.familiesSource$
   ).pipe(shareReplay(1));
 
-  peopleSource$ = new BehaviorSubject<Observable<{ id: number, name: string }[]>>(of([{
-    id: 1,
-    name: 'Mathis',
-    animationState: 'open'
-  }, {
-    id: 2,
-    name: 'Plorb',
-    animationState: 'open'
-  },
-  {
-    id: 3,
-    name: 'Jonas',
-    animationState: 'open'
-  },
-  {
-    id: 4,
-    name: 'Brunhild',
-    animationState: 'open'
-  },
-  {
-    id: 5,
-    name: 'Haien Stog',
-    animationState: 'open'
-  }]));
+  peopleSource$ = new BehaviorSubject<Observable<{ id: number, name: string }[]>>(of(people));
 
   people$ = this.peopleSource$.asObservable();
 
@@ -117,13 +71,15 @@ export class AppComponent {
       .then(res => {
         const personWithDeleteState = res.map(p => (p.id === elementToDelete.id) ? {...p, animationState: 'closed'} : p);
 
+        console.log(personWithDeleteState);
+
       this.deleteItem.subscribe(() => this.peopleSource$.next(of(personWithDeleteState)));
     })
   }
 
   chooseFamily(family: { lastname: string, familyMembers?: { id: number, name: string }[] }): void {
     family.familyMembers.map(familyMember => {
-      return { ...familyMember, animationState: 'closed' };
+      return { ...familyMember, animationState: 'open' };
     })
 
     this.peopleSource$.next(of(family.familyMembers));
