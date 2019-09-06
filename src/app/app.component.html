@@ -19,7 +19,7 @@
       <div class="col-md-10">
         <ng-container *ngIf="people$ | async as people">
           <ul class="heroes" *ngIf="people | async as myPeople">
-            <li class="hero redBox" [@shrinkOut]="person.animationState ? 'open' : 'closed'" *ngFor="let person of myPeople; let i = index" (click)="deleteElement(person)">
+            <li class="hero redBox" [@shrinkOut]="person.animationState" *ngFor="let person of myPeople; let i = index" (click)="deleteElement(person)">
               {{ person.name + '(' + myPeople.length + ')' }}
             </li>
             <li *ngIf="myPeople.length === 0">

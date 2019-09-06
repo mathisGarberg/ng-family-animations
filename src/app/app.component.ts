@@ -47,7 +47,7 @@ import {
         opacity: 0.5,
         backgroundColor: 'green'
       })),
-      transition('* => void', [
+      transition('open => closed', [
         animate('1s')
       ]),
     ])
@@ -65,7 +65,7 @@ export class AppComponent {
     {
       id: 1,
       lastname: 'Garberg',
-      familyMembers: [  { id: 1, name: 'Anne Katt' }, { id: 2, name: 'Hitler' }, { id: 3, name: 'Elton John' }, { id: 4, name: 'Michael Jackson' }, { id: 5, name: 'Haien Stog' }]
+      familyMembers: [  { id: 1, name: 'Anne Katt', animationState: 'open' }, { id: 2, name: 'Hitler', animationState: 'open' }, { id: 3, name: 'Elton John', animationState: 'open' }, { id: 4, name: 'Michael Jackson', animationState: 'open' }, { id: 5, name: 'Haien Stog', animationState: 'open' }]
     },
     {
       id: 2,
@@ -113,10 +113,11 @@ export class AppComponent {
   people$ = this.peopleSource$.asObservable();
 
   deleteElement(elementToDelete: { id: number, name: string }): void {
-    this.peopleSource$.getValue().toPromise().then(value =>
-      value.filter(person => person.id !== elementToDelete.id)
-    ).then(res => {
-      this.deleteItem.subscribe(() => this.peopleSource$.next(of(res)));
+    this.peopleSource$.getValue().toPromise()
+      .then(res => {
+        const personWithDeleteState = res.map(p => (p.id === elementToDelete.id) ? {...p, animationState: 'closed'} : p);
+
+      this.deleteItem.subscribe(() => this.peopleSource$.next(of(personWithDeleteState)));
     })
   }
 
