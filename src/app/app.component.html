@@ -1,32 +1,26 @@
-<hello name="{{ name }}"></hello>
-<p>
-  Start editing to see some magic happen :)
-</p>
-
-
-  <div class="container">
-    <div class="row">
-      <div class="col-md-2">
-        <ul>
-          <li *ngFor="let family of families$ | async" class="greenBox" (click)="chooseFamily(family)">
-            {{ family.lastname }}
-            <ul>
-              <li class="smallText" *ngFor="let familyMember of family.familyMembers">{{ familyMember.name }}</li>
-            </ul>
+<div class="container">
+  <div class="row">
+    <div class="col-md-2">
+      <ul>
+        <li *ngFor="let family of families$ | async" class="greenBox" (click)="chooseFamily(family)">
+          {{ family.lastname }}
+          <ul>
+            <li class="smallText" *ngFor="let familyMember of family.familyMembers">{{ familyMember.name }}</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-10">
+      <ng-container *ngIf="people$ | async as people">
+        <ul class="heroes" [@pageAnimations]="myPeople.length" *ngIf="people | async as myPeople">
+          <li class="hero redBox" [@shrinkOut]="person.animationState" *ngFor="let person of myPeople; let i = index" (click)="deleteElement(person)">
+            {{ person.name + '(' + myPeople.length + ')' }}
+          </li>
+          <li *ngIf="findStringInObjArr(myPeople)">
+            <p>Ingen famile.</p>
           </li>
         </ul>
-      </div>
-      <div class="col-md-10">
-        <ng-container *ngIf="people$ | async as people">
-          <ul class="heroes" [@pageAnimations]="myPeople.length" *ngIf="people | async as myPeople">
-            <li class="hero redBox" [@shrinkOut]="person.animationState == 'open' ? 'open' : 'closed'" *ngFor="let person of myPeople; let i = index" (click)="deleteElement(person)">
-              {{ person.name + '(' + myPeople.length + ')' }}
-            </li>
-            <li *ngIf="findStringInObjArr(myPeople)">
-              Ingen famile.
-            </li>
-          </ul>
-        </ng-container> 
-      </div>
+      </ng-container> 
+    </div>
   </div>
 </div>
