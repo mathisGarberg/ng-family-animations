@@ -22,7 +22,7 @@ import { families, people } from './mock-data';
       transition('* <=> *',  [
         query(':enter', style({ opacity: 0 }), { optional: true }),
 
-        query(':enter', stagger('300ms', [
+        query(':enter', stagger(300, [
           animate('.5s ease-in', keyframes([
             style({ opacity: 0, transform: 'translateY(-75%)', offset: 0 }),
             style({ opacity: .5, transform: 'translateY(35px)', offset: 0.3 }),
@@ -36,13 +36,16 @@ import { families, people } from './mock-data';
         backgroundColor: 'red'
       })),
       state('closed', style({
-        height: '100px',
-        opacity: 0.5,
-        backgroundColor: 'green'
+        display: 'none',
+        color: '#000',
+        opacity: 0,
+        backgroundColor: 'lightblue'
       })),
-      // transition('open => closed', [
-      //   animate(1000)
-      // ])
+      transition('* => closed', [
+        animate('.4s', style({
+          transform: 'translateX(80%)'
+        }))
+      ])
     ])
   ]
 })
@@ -68,6 +71,7 @@ export class AppComponent {
 
   deleteElement(elementToDelete: { id: number, name: string }): void {
     this.peopleSource$.getValue().toPromise()
+
       .then(res => {
         const personWithDeleteState = res.map(p => (p.id === elementToDelete.id) ? {...p, animationState: 'closed'} : p);
 
@@ -81,6 +85,8 @@ export class AppComponent {
     family.familyMembers.map(familyMember => {
       return { ...familyMember, animationState: 'open' };
     })
+
+    console.log(family.familyMembers);
 
     this.peopleSource$.next(of(family.familyMembers));
   }
